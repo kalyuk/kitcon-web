@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "lib": [
+            "dom",
+            "es2015",
+            "esnext"
+        ],
+        "skipLibCheck": true,
+        "module": "commonjs",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "esModuleInterop": false,
+        "noImplicitAny": false,
+        "target": "es5",
+        "jsx": "react",
+        "paths": {}
+    },
+    "files": [
+        "custom.d.ts"
+    ],
+    "include": [
+        "custom.d.ts",
+        "src/**/*",
+    ],
+}
