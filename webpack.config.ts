@@ -43,7 +43,12 @@ const config = {
         })
     ],
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', 'jsx']
+        extensions: ['.ts', '.tsx', '.js', 'jsx'],
+        alias: {
+            "@kitcon/core": path.join(ROOT_PATH, 'kitcon', 'core', 'src'),
+            "@kitcon/ui": path.join(ROOT_PATH, 'kitcon', 'ui', 'src'),
+            "@kitcon/node": path.join(ROOT_PATH, 'kitcon', 'node', 'src')
+        }
     }
 };
 
@@ -74,12 +79,16 @@ module.exports = [
             new HtmlWebpackPlugin({
                 filename: '../server/views/index.html',
                 template: 'server/views/index.html'
+            }),
+            new webpack.DefinePlugin({
+                'global.IS_BROWSER': true,
             })
         ],
         target: 'web'
     },
     {
         ...config,
+        devtool: NODE_ENV === 'development' ? 'source-map' : null,
         entry: {
             server: path.join(SRC_PATH, 'server', 'server.tsx')
         },
@@ -91,7 +100,7 @@ module.exports = [
                     use: {
                         loader: 'awesome-typescript-loader',
                         options: {
-                            configFileName: 'tsconfig.server.json' 
+                            configFileName: 'tsconfig.server.json'
                         }
                     }
                 }
@@ -102,7 +111,9 @@ module.exports = [
             path: path.join(SERVER_PATH)
         },
         externals: [
-            nodeExternals()
+            nodeExternals({
+                allowlist: [/kitcon\//]
+            })
         ],
         plugins: [
             ...config.plugins,
