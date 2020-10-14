@@ -9,6 +9,17 @@
         "target": "ES2015",
         "module": "commonjs",
         "moduleResolution": "node",
-        "jsx": "react"
+        "jsx": "react",
+        "paths": {
+            "@kitcon/core/*": [
+                "../kitcon-core/src/*"
+            ],
+            "@kitcon/node/*": [
+                "../kitcon-node/src/*"
+            ],
+            "@kitcon/ui/*": [
+                "../kitcon-ui/src/*"
+            ]
+        }
     }
 }

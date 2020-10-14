@@ -16,13 +16,14 @@
         "noImplicitAny": false,
         "target": "es5",
         "jsx": "react",
-        "paths": {
+        "paths": { 
             "@kitcon/core/*": [
-                "./kitcon/core/src/*",
                 "../kitcon-core/src/*"
             ],
+            "@kitcon/node/*": [
+                "../kitcon-node/src/*"
+            ],
             "@kitcon/ui/*": [
-                "./kitcon/ui/src/*",
                 "../kitcon-ui/src/*"
             ]
         }

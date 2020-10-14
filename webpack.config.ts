@@ -6,7 +6,6 @@ import * as nodeExternals from 'webpack-node-externals';
 // @ts-ignore
 import * as WebpackShellPlugin from 'webpack-shell-plugin-next';
 
-
 export const ROOT_PATH = __dirname;
 
 const DIST_PATH = path.join(__dirname, 'dist');
@@ -45,47 +44,47 @@ const config = {
     resolve: {
         extensions: ['.ts', '.tsx', '.js', 'jsx'],
         alias: {
-            "@kitcon/core": path.join(ROOT_PATH, 'kitcon', 'core', 'src'),
-            "@kitcon/ui": path.join(ROOT_PATH, 'kitcon', 'ui', 'src'),
-            "@kitcon/node": path.join(ROOT_PATH, 'kitcon', 'node', 'src')
+            "@kitcon/core": path.join(ROOT_PATH, '..', 'kitcon-core', 'src'),
+            "@kitcon/ui": path.join(ROOT_PATH, '..', 'kitcon-ui', 'src'),
+            "@kitcon/node": path.join(ROOT_PATH, '..', 'kitcon-node', 'src')
         }
     }
 };
 
 module.exports = [
 
-    {
-        devtool: NODE_ENV === 'development' ? 'source-map' : null,
-        ...config,
-        module: {
-            rules: [
-                ...config.module.rules,
-                {
-                    test: /\.(ts|tsx)?$/,
-                    use: 'awesome-typescript-loader'
-                }
-            ]
-        },
-        entry: {
-            web: [path.join(SRC_PATH, 'browser', 'browser.tsx')]
-        },
-        output: {
-            filename: 'js/[name].js',
-            path: PUBLIC_PATH,
-            publicPath: '/'
-        },
-        plugins: [
-            ...config.plugins,
-            new HtmlWebpackPlugin({
-                filename: '../server/views/index.html',
-                template: 'server/views/index.html'
-            }),
-            new webpack.DefinePlugin({
-                'global.IS_BROWSER': true,
-            })
-        ],
-        target: 'web'
-    },
+    // {
+    //     devtool: NODE_ENV === 'development' ? 'source-map' : null,
+    //     ...config,
+    //     module: {
+    //         rules: [
+    //             ...config.module.rules,
+    //             {
+    //                 test: /\.(ts|tsx)?$/,
+    //                 use: 'awesome-typescript-loader'
+    //             }
+    //         ]
+    //     },
+    //     entry: {
+    //         web: [path.join(SRC_PATH, 'browser', 'browser.tsx')]
+    //     },
+    //     output: {
+    //         filename: 'js/[name].js',
+    //         path: PUBLIC_PATH,
+    //         publicPath: '/'
+    //     },
+    //     plugins: [
+    //         ...config.plugins,
+    //         new HtmlWebpackPlugin({
+    //             filename: '../server/views/index.mst',
+    //             template: 'server/views/index.mst'
+    //         }),
+    //         new webpack.DefinePlugin({
+    //             'global.IS_BROWSER': true,
+    //         })
+    //     ],
+    //     target: 'web'
+    // },
     {
         ...config,
         devtool: NODE_ENV === 'development' ? 'source-map' : null,
@@ -117,16 +116,15 @@ module.exports = [
         ],
         plugins: [
             ...config.plugins,
-
+            new webpack.DefinePlugin({
+                'global.ROOT_PATH': JSON.stringify(ROOT_PATH),
+            }),
             // @ts-ignore
             new WebpackShellPlugin({
                 onBuildEnd: {
                     scripts: ['node dist/server/server.js']
                 }
             }),
-            new webpack.DefinePlugin({
-                'global.ROOT_PATH': JSON.stringify(ROOT_PATH),
-            })
         ],
         target: 'node'
     }

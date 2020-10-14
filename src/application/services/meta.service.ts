@@ -1,5 +1,5 @@
 import { Injectable, resolve } from '@kitcon/core/annotations';
-import { ApiService } from './api.service';
+import { ApiService } from '@kitcon/ui/services/api.service';
 
 @Injectable
 export class MetaService {
@@ -9,7 +9,10 @@ export class MetaService {
 
 
     async loadMeta(type: string) {
-        this.apiService.get('/seo/meta/' + type);
+        const result = await this.apiService.get('/seo', { q: type });
+        console.log('-----------------------------')
+        console.log(result)
+        console.log('-----------------------------')
     }
 
 }
