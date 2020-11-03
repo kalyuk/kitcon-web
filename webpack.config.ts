@@ -2,6 +2,10 @@ import * as webpack from 'webpack';
 import * as path from 'path';
 import * as HtmlWebpackPlugin from 'html-webpack-plugin';
 import * as nodeExternals from 'webpack-node-externals';
+import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import * as CopyWebpackPlugin from 'copy-webpack-plugin';
+
 
 // @ts-ignore
 import * as WebpackShellPlugin from 'webpack-shell-plugin-next';
@@ -21,7 +25,62 @@ const config = {
     context: SRC_PATH,
     mode: NODE_ENV,
     module: {
-        rules: []
+        rules: [
+            {
+                test: /\.(png|jpeg|jpg|gif)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: 'images/[hash].[ext]',
+                            publicPath: '/'
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.css$/i,
+                use: [MiniCssExtractPlugin.loader, 'css-loader'],
+            },
+            {
+                test: /\.scss$/i,
+                exclude: [/\.global\.scss$/i],
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            url: false,
+                            modules: {
+                                exportLocalsConvention: 'camelCaseOnly',
+                                localIdentName:
+                                    NODE_ENV === 'development'
+                                        ? '[local]--[hash:base64:3]'
+                                        : '[hash:base64:6]'
+                            }
+                        }
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+
+                        }
+                    }
+                ],
+            }, {
+                test: /\.global\.scss$/i,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+
+                        }
+                    }
+                ],
+            }
+        ]
     },
     optimization: {
         splitChunks: {
@@ -30,12 +89,15 @@ const config = {
                     chunks: 'initial',
                     filename: 'js/static.js',
                     name: 'static',
-                    test: /node_modules|vendors/
+                    test: /node_modules/
                 }
             }
         }
     },
     plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'css/[name].css'
+        }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
             'process.env.PORT': JSON.stringify(process.env.PORT || 2016)
@@ -52,39 +114,48 @@ const config = {
 };
 
 module.exports = [
-
-    // {
-    //     devtool: NODE_ENV === 'development' ? 'source-map' : null,
-    //     ...config,
-    //     module: {
-    //         rules: [
-    //             ...config.module.rules,
-    //             {
-    //                 test: /\.(ts|tsx)?$/,
-    //                 use: 'awesome-typescript-loader'
-    //             }
-    //         ]
-    //     },
-    //     entry: {
-    //         web: [path.join(SRC_PATH, 'browser', 'browser.tsx')]
-    //     },
-    //     output: {
-    //         filename: 'js/[name].js',
-    //         path: PUBLIC_PATH,
-    //         publicPath: '/'
-    //     },
-    //     plugins: [
-    //         ...config.plugins,
-    //         new HtmlWebpackPlugin({
-    //             filename: '../server/views/index.mst',
-    //             template: 'server/views/index.mst'
-    //         }),
-    //         new webpack.DefinePlugin({
-    //             'global.IS_BROWSER': true,
-    //         })
-    //     ],
-    //     target: 'web'
-    // },
+    {
+        devtool: NODE_ENV === 'development' ? 'source-map' : null,
+        ...config,
+        module: {
+            rules: [
+                ...config.module.rules,
+                {
+                    test: /\.(ts|tsx)?$/,
+                    use: 'awesome-typescript-loader'
+                }
+            ]
+        },
+        entry: {
+            web: [path.join(SRC_PATH, 'browser', 'browser.tsx')],
+            vendors: [path.join(SRC_PATH, 'vendors', 'index.ts')],
+        },
+        output: {
+            filename: 'js/[name].js',
+            path: PUBLIC_PATH,
+            publicPath: '/'
+        },
+        plugins: [
+            ...config.plugins,
+            new CleanWebpackPlugin(),
+            new CopyWebpackPlugin({
+                patterns: [
+                    {
+                        from: 'assets',
+                        to: 'assets'
+                    }
+                ]
+            }),
+            new HtmlWebpackPlugin({
+                filename: '../server/views/index.mst',
+                template: 'server/views/index.mst'
+            }),
+            new webpack.DefinePlugin({
+                'global.IS_BROWSER': true,
+            })
+        ],
+        target: 'web'
+    },
     {
         ...config,
         devtool: NODE_ENV === 'development' ? 'source-map' : null,

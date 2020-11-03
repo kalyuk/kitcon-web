@@ -2,9 +2,14 @@ import * as React from 'react';
 import { resolve } from '@kitcon/core/annotations';
 import { DI, load } from '@kitcon/ui/annotations';
 import { MetaService } from '../../services/meta.service';
+import classNames from 'classnames';
+import styles from './main-page.scss';
+import { MainMenu } from '../../components/main-menu/main-menu';
+import { renderRoutes, RouteConfigComponentProps } from 'react-router-config';
+
 
 @DI
-export class MainPage extends React.Component {
+export class MainPage extends React.Component<RouteConfigComponentProps> {
 
     @resolve
     private readonly metaService: MetaService;
@@ -20,6 +25,13 @@ export class MainPage extends React.Component {
     }
 
     render() {
-        return (<div>Some text from main page</div>)
+        return (
+            <div className={classNames(styles.mainPage)}>
+                <div className="container">
+                    <MainMenu className={styles.mainMenu} />
+                </div>
+                {renderRoutes(this.props.route.routes)}
+            </div>
+        );
     }
 }

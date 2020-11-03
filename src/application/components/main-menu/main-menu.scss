@@ -1,0 +1,40 @@
+.main-menu{
+    background: #221411 url("/assets/images/sitenav-bar-bg.jpg") repeat-x center;
+    height: 80px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+
+    div[role="menu"] {
+
+        display: flex;
+        align-items: center;
+
+        &:global(.text-right){
+            justify-content: right;
+        }
+
+        a {
+            display: inline-block;
+            padding: 0 14px;
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 20px;
+            text-transform: uppercase;
+    
+            color: #F8B700;
+            text-decoration: none;
+
+            &:first-child{
+                padding-left: 28px;
+            }
+
+            &:hover{
+                color: #fff;
+            }
+        }
+    }
+    
+}

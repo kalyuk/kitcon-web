@@ -1,0 +1,19 @@
+.block{
+    background: url('/assets/images/sitenav-bar-count-bg.jpg') repeat-x;
+    background-color: rgba(179, 61, 38, 0.5);
+    height: 80px;
+    border-left: 1px solid rgba(179, 61, 38, 0.5);
+    border-right: 1px solid rgba(179, 61, 38, 0.5);
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 20px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    width: 160px;
+    justify-content: center;
+    color: #F8B700;
+}
