@@ -1,0 +1,22 @@
+.input-wrapper {
+    display: block;
+    .label {
+        display: block;
+        color: #fff;
+        line-height: 30px;
+    }
+
+    .input {
+        display: block;
+        padding: 8px 16px;
+        border: 2px solid #80848a;
+        border-radius: 2px;
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .error {
+        color: #d93812;
+        text-shadow: 0px 0px 8px #000;
+    }
+}

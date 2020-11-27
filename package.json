@@ -54,6 +54,7 @@
     "webpack-shell-plugin-next": "^1.2.0"
   },
   "dependencies": {
+    "class-validator": "^0.12.2",
     "express": "^4.17.1",
     "ioredis": "^4.17.3",
     "mobx": "^5.15.6",
